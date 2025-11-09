@@ -1,0 +1,33 @@
+name: Matrix Build Demo
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        node-version: [14, 16, 18]  # 3 matrix variants
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: matrix-080239a
+        run: echo "Building for Node.js version ${{ matrix.node-version }}"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Generate build artifact
+        run: echo "Build output for Node.js version ${{ matrix.node-version }}" > build-output.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-080239a-v${{ matrix.node-version }}
+          path: build-output.txt
